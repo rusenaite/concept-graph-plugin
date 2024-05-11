@@ -4,6 +4,8 @@ Plugin Name: Concept Graph
 Plugin URI: https://github.com/rusenaite/concept-graph-plugin
 Description: A WordPress plugin of concept graph visualization.
 Version: 1.0
+License: GPL-3.0
+License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 Author: Austėja Rušėnaitė
 Author URI: https://github.com/rusenaite/concept-graph-plugin
 */
@@ -12,7 +14,7 @@ Author URI: https://github.com/rusenaite/concept-graph-plugin
 add_action('wp_enqueue_scripts', 'pluginScripts');
 add_shortcode('conceptGraphPlugin', 'pluginShortcode');
 
-// Function to enqueue your scripts and styles
+// Function to enqueue scripts and styles
 function pluginScripts() {
     // Enqueue the stylesheet
     wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/styles.css');
@@ -38,7 +40,6 @@ function pluginShortcode() {
 
     ob_start();
     ?>
-    <!-- Your Updated HTML content goes here -->
     <div id="graph_visualization"></div>
     <?php
     return ob_get_clean();
