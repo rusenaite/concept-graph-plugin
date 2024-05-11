@@ -144,7 +144,10 @@ async function buildGraph() {
             .enter()
             .append("text")
             .attr("class", "label")
-            .attr("id", node => `link-${node.data.name.replace(/\s+/g, "-")}-${node.data.links.forEach(link => link.replace(/\s+/g, "-"))}`)
+            .attr("id", node => {
+                const linksPart = node.data.links.map(link => link.replace(/\s+/g, "-")).join("-");
+                return `node-${node.data.name.replace(/\s+/g, "-")}-${linksPart}`;
+            })
             .attr("dy", "0.31em")
             .text(d => toTitleCase(d.data.key))
             .attr("transform", function (d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + PADDING_LABEL) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
@@ -166,10 +169,18 @@ async function buildGraph() {
             .attr('fill', '#69a3b2')
             .style("pointer-events", "all")
             .on("mouseover", function (d) {
+                const title = toTitleCase(d.data.name);
+                const descriptionCharLimit = 200;
+
+                let description = d.data.description;
+                if (description.length > descriptionCharLimit) {
+                    description = description.substring(0, description.lastIndexOf(" ", descriptionCharLimit)) + "...";
+                }
+
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", 0.9); // Fully opaque
-                tooltip.html("<strong>" + toTitleCase(d.data.name) + "</strong><br/>" + d.data.description) // Bold title
+                tooltip.html("<strong>" + title + "</strong><br/>" + description)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
