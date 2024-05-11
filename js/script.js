@@ -13,7 +13,7 @@ async function fetchPosts() {
         const transformedData = postsData
             .filter(post => post.type === 'post' && post.categories.includes(DICTIONARY_ITEM_TYPE))
             .map(post => ({
-                name: post.title.rendered,
+                name: post.title.rendered.toLowerCase(),
                 description: post.content.rendered,
                 links: post.tags
             }));
@@ -34,7 +34,7 @@ async function fetchTags() {
             .filter(tag => tag.taxonomy === 'post_tag')
             .map(tag => ({
                 id: tag.id,
-                name: tag.name
+                name: tag.name.toLowerCase()
             }));
 
         return transformedTags;
@@ -125,8 +125,6 @@ async function buildGraph() {
         cluster(root); // computes layout coordinates
         let leaves = root.leaves()
 
-        console.log('leaves', leaves);
-
         link = g.selectAll(".link")
             .data(getLinksOfAllNodes(leaves))
             .enter()
@@ -134,8 +132,8 @@ async function buildGraph() {
             .attr("class", "link")
             .each(function (link) { link.source = link[0], link.target = link[link.length - 1]; })
             .attr("id", d => {
-                console.log('d', d);
-                return `link-${[d[0].data.name.replace(/\s+/g, "-"), d[2].data.name.replace(/\s+/g, "-")].sort().join("-")}`;
+                let edgeId = generateEdgeId(d[0].data.name, d[2].data.name);
+                return `link-${edgeId}`;
             })
             .attr("d", line)
             .attr("fill", "none")
@@ -148,10 +146,9 @@ async function buildGraph() {
             .attr("class", "label")
             .attr("id", node => `link-${node.data.name.replace(/\s+/g, "-")}-${node.data.links.forEach(link => link.replace(/\s+/g, "-"))}`)
             .attr("dy", "0.31em")
-            .text(function (d) { return toTitleCase(d.data.key); })
+            .text(d => toTitleCase(d.data.key))
             .attr("transform", function (d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + PADDING_LABEL) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
             .attr("text-anchor", function (d) { return d.x < 180 ? "start" : "end"; })
-            .text(function (d) { return d.data.key; })
             .style("font-family", "'Roboto', Arial, Helvetica, sans-serif");
 
         let tooltip = d3.select("#graph_visualization").append("div")
@@ -222,18 +219,31 @@ function findConnections(nodeName, leaves) {
 
     let linksMap = createLinksMapFromLeaves(leaves);
 
-    // Directly access and iterate through connections of the nodeName
+    // Find outbound links
     if (linksMap.has(nodeName)) {
         linksMap.get(nodeName).forEach(connectedNode => {
             if (!visitedNodes.has(connectedNode)) {
                 visitedNodes.add(connectedNode);
-                let edgeId = `${[nodeName.replace(/\s+/g, "-"), connectedNode.replace(/\s+/g, "-")].sort().join("-")}`;
+                let edgeId = generateEdgeId(nodeName, connectedNode);
                 visitedEdges.add(edgeId);
             }
         });
     }
 
+    // Find inbound links
+    Array.from(linksMap.entries()).forEach(([node, connectedNodes]) => {
+        if (connectedNodes.has(nodeName.toLowerCase()) && !visitedNodes.has(node)) {
+            visitedNodes.add(node);
+            let edgeId = generateEdgeId(node, nodeName);
+            visitedEdges.add(edgeId);
+        }
+    });
+
     return { visitedNodes, visitedEdges };
+}
+
+function generateEdgeId(source, target) {
+    return `${[source.replace(/\s+/g, "-"), target.replace(/\s+/g, "-")].sort().join("-")}`;
 }
 
 function createLinksMapFromLeaves(leaves) {
@@ -295,29 +305,22 @@ function getLinksOfAllNodes(nodes) {
     let map = {},
         links = [];
 
-    console.log('nodes', nodes);
     // Compute a map from name to node.
     nodes.forEach(node => {
         map[node.data.name] = node;
     });
-    console.log('map', nodes);
 
     // For each import, construct a link from the source to target node.
     nodes.forEach(node => {
         if (node.data.links) {
             node.data.links.forEach(link => {
-                //links.push(map[node.data.name].path(map[link]));
-
                 let source = map[node.data.name];
-
-                console.log('link', toTitleCase(link));
-                let target = map[toTitleCase(link)];
+                let target = map[link];
 
                 if (target === undefined) {
                     console.log('target is undefined');
                     return;
                 }
-                console.log('target', target);
 
                 let createdLink = source.path(target);
                 links.push(createdLink);
@@ -326,6 +329,5 @@ function getLinksOfAllNodes(nodes) {
         }
     });
 
-    console.log('links', links.filter(link => link.length === 3));
     return links.filter(link => link.length === 3);
 }
