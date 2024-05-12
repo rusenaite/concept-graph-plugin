@@ -101,7 +101,7 @@ let link = g.append("g").selectAll(".link"),
     label = g.append("g").selectAll(".label"),
     bubble = g.append("g").selectAll(".bubble");
 
-let initialTransform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(1);
+let initialTransform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(0.5);
 svg.call(d3.zoom().transform, initialTransform);
 
 svg.append("rect")
@@ -110,7 +110,7 @@ svg.append("rect")
     .attr("fill", "none")
     .call(d3.zoom().on("zoom", function () {
         let transform = d3.event.transform;
-        g.attr("transform", transform);
+        g.attr("transform", transform, initialTransform);
     }));
 
 let bubbleSizeScale = d3.scaleLinear()

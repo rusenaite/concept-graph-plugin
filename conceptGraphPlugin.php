@@ -45,8 +45,9 @@ function pluginShortcode()
 
     ob_start();
 ?>
-    <div id="loading-indicator" class="loader"></div>
-    <div id="graph_visualization"></div>
+    <div id="graph_visualization">
+        <div id="loading-indicator" class="loader"></div>
+    </div>
 <?php
     return ob_get_clean();
 }
