@@ -45,9 +45,7 @@ function pluginShortcode()
 
     ob_start();
 ?>
-    <div id="loading-indicator" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; z-index: 100; display: none;">
-        Loading...
-    </div>
+    <div id="loading-indicator" class="loader"></div>
     <div id="graph_visualization"></div>
 <?php
     return ob_get_clean();
