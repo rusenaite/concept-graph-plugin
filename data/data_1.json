@@ -59,7 +59,8 @@
         "name": "Ontology",
         "description": "Ontology is the branch of philosophy concerned with the study of being and existence.",
         "links": [
-            "Metaphysics"
+            "Metaphysics",
+            "Existentialism"
         ]
     },
     {
@@ -118,7 +119,9 @@
         "description": "Nihilism is the philosophical belief that life is without objective meaning, purpose, or intrinsic value.",
         "links": [
             "Metaphysics",
-            "Ethics"
+            "Ethics",
+            "Nihilism",
+            "Existentialism"
         ]
     },
     {

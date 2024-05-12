@@ -23,9 +23,9 @@ function pluginScripts() {
     wp_enqueue_script('d3-js', 'https://d3js.org/d3.v4.js', [], false, true);
 
     // Enqueue plugin scripts
-    wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . 'bundle.js', ['d3-js'], false, true);
-    //wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . 'js/script.js', ['d3-js'], false, true);
-    wp_enqueue_script('api', get_template_directory_uri() . '/js/api.js', [], false, true);
+    //wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . 'bundle.js', ['d3-js'], false, true);
+    wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . 'js/script.js', ['d3-js'], false, true);
+    //wp_enqueue_script('api', get_template_directory_uri() . '/js/api.js', [], false, true);
 
 
     // Pass the URL of the JSON file to the script

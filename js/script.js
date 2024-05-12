@@ -7,7 +7,7 @@ const DICTIONARY_ITEM_TYPE = 5;
 
 async function fetchPosts() {
     try {
-        const response = await fetch(`${BASE_URL}/posts`);
+        const response = await fetch(`${BASE_URL}/posts?per_page=100`);
         const postsData = await response.json();
 
         const transformedData = postsData
@@ -27,7 +27,7 @@ async function fetchPosts() {
 
 async function fetchTags() {
     try {
-        const response = await fetch(`${BASE_URL}/tags`);
+        const response = await fetch(`${BASE_URL}/tags?per_page=100`);
         const tagsData = await response.json();
 
         const transformedTags = tagsData
@@ -120,7 +120,7 @@ async function buildGraph() {
         const graphData = await getGraphData();
 
         let root = createHierarchyForRadialLayoutFromFlatData(graphData)
-            .sum(function (node) { return node.size; });
+            .sum(node => node.size);
 
         cluster(root); // computes layout coordinates
         let leaves = root.leaves()
@@ -313,29 +313,28 @@ function createHierarchyForRadialLayoutFromFlatData(nodesData) {
 }
 
 function getLinksOfAllNodes(nodes) {
-    let map = {},
+    let nodesMap = {},
         links = [];
 
     // Compute a map from name to node.
     nodes.forEach(node => {
-        map[node.data.name] = node;
+        nodesMap[node.data.name] = node;
     });
 
     // For each import, construct a link from the source to target node.
     nodes.forEach(node => {
         if (node.data.links) {
             node.data.links.forEach(link => {
-                let source = map[node.data.name];
-                let target = map[link];
+                let source = nodesMap[node.data.name];
+                let target = nodesMap[link];
 
                 if (target === undefined) {
                     console.log('target is undefined');
-                    return;
+                    console.log('link', link);
+                } else {
+                    let createdLink = source.path(target);
+                    links.push(createdLink);
                 }
-
-                let createdLink = source.path(target);
-                links.push(createdLink);
-
             });
         }
     });
