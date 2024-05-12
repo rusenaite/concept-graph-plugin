@@ -123,107 +123,113 @@ buildGraph();
 
 async function buildGraph() {
     try {
-        const graphData = await getGraphData();
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('loading-indicator').style.display = 'block';
 
-        let root = createHierarchyForRadialLayoutFromFlatData(graphData)
-            .sum(node => node.size);
+            const graphData = await getGraphData();
 
-        cluster(root); // computes layout coordinates
-        let leaves = root.leaves()
+            let root = createHierarchyForRadialLayoutFromFlatData(graphData)
+                .sum(node => node.size);
 
-        link = g.selectAll(".link")
-            .data(getLinksOfAllNodes(leaves))
-            .enter()
-            .append("path")
-            .attr("class", "link")
-            .each(function (link) { link.source = link[0], link.target = link[link.length - 1]; })
-            .attr("id", d => {
-                let edgeId = generateEdgeId(d[0].data.name, d[2].data.name);
-                return `link-${edgeId}`;
-            })
-            .attr("d", line)
-            .attr("fill", "none")
-            .attr("stroke", "black")
+            cluster(root); // computes layout coordinates
+            let leaves = root.leaves()
 
-        label = label
-            .data(leaves)
-            .enter()
-            .append("text")
-            .attr("class", "label")
-            .attr("id", node => {
-                const linksPart = node.data.links.map(link => link.replace(/\s+/g, "-")).join("-");
-                return `node-${node.data.name.replace(/\s+/g, "-")}-${linksPart}`;
-            })
-            .attr("dy", "0.31em")
-            .text(d => toTitleCase(d.data.key))
-            .attr("transform", function (d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + PADDING_LABEL) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
-            .attr("text-anchor", function (d) { return d.x < 180 ? "start" : "end"; })
-            .style("font-family", "'Roboto', Arial, Helvetica, sans-serif");
+            link = g.selectAll(".link")
+                .data(getLinksOfAllNodes(leaves))
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .each(function (link) { link.source = link[0], link.target = link[link.length - 1]; })
+                .attr("id", d => {
+                    let edgeId = generateEdgeId(d[0].data.name, d[2].data.name);
+                    return `link-${edgeId}`;
+                })
+                .attr("d", line)
+                .attr("fill", "none")
+                .attr("stroke", "black")
 
-        let tooltip = d3.select("#graph_visualization").append("div")
-            .attr("class", "tooltip");
+            label = label
+                .data(leaves)
+                .enter()
+                .append("text")
+                .attr("class", "label")
+                .attr("id", node => {
+                    const linksPart = node.data.links.map(link => link.replace(/\s+/g, "-")).join("-");
+                    return `node-${node.data.name.replace(/\s+/g, "-")}-${linksPart}`;
+                })
+                .attr("dy", "0.31em")
+                .text(d => toTitleCase(d.data.key))
+                .attr("transform", function (d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + PADDING_LABEL) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
+                .attr("text-anchor", function (d) { return d.x < 180 ? "start" : "end"; })
+                .style("font-family", "'Roboto', Arial, Helvetica, sans-serif");
 
-        bubble = g.selectAll(".node")
-            .data(leaves)
-            .enter()
-            .append("circle")
-            .attr("id", d => `node-${d.data.name.replace(/\s+/g, "-")}`)
-            .attr("class", "bubble")
-            .attr("transform", function (d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + PADDING_BUBBLE) + ",0)" })
-            .attr('r', d => bubbleSizeScale(d.value))
-            .attr('stroke', 'black')
-            .attr('fill', '#69a3b2')
-            .style("pointer-events", "all")
-            .on("mouseover", function (d) {
-                const title = toTitleCase(d.data.name);
-                const descriptionCharLimit = 200;
+            let tooltip = d3.select("#graph_visualization").append("div")
+                .attr("class", "tooltip");
 
-                let description = d.data.description;
-                if (description.length > descriptionCharLimit) {
-                    description = description.substring(0, description.lastIndexOf(" ", descriptionCharLimit)) + "...";
-                }
+            bubble = g.selectAll(".node")
+                .data(leaves)
+                .enter()
+                .append("circle")
+                .attr("id", d => `node-${d.data.name.replace(/\s+/g, "-")}`)
+                .attr("class", "bubble")
+                .attr("transform", function (d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + PADDING_BUBBLE) + ",0)" })
+                .attr('r', d => bubbleSizeScale(d.value))
+                .attr('stroke', 'black')
+                .attr('fill', '#69a3b2')
+                .style("pointer-events", "all")
+                .on("mouseover", function (d) {
+                    const title = toTitleCase(d.data.name);
+                    const descriptionCharLimit = 200;
 
-                tooltip.transition()
-                    .duration(200)
-                    .style("opacity", 0.9); // Fully opaque
-                tooltip.html("<strong>" + title + "</strong><br/>" + description)
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-            })
-            .on("mouseout", function (d) {
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            })
-            .on("click", function (clickedData) {
-                d3.event.stopPropagation();
+                    let description = d.data.description;
+                    if (description.length > descriptionCharLimit) {
+                        description = description.substring(0, description.lastIndexOf(" ", descriptionCharLimit)) + "...";
+                    }
 
-                // Dim everything initially
-                d3.selectAll('.bubble').style('opacity', 0.2);
-                d3.selectAll('path.link').style('opacity', 0.1);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0.9); // Fully opaque
+                    tooltip.html("<strong>" + title + "</strong><br/>" + description)
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on("mouseout", function (d) {
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                })
+                .on("click", function (clickedData) {
+                    d3.event.stopPropagation();
 
-                // Highlight the clicked node
-                d3.select(this).style('opacity', 1);
+                    // Dim everything initially
+                    d3.selectAll('.bubble').style('opacity', 0.2);
+                    d3.selectAll('path.link').style('opacity', 0.1);
 
-                const { visitedNodes, visitedEdges } = findConnections(clickedData.data.name, leaves);
+                    // Highlight the clicked node
+                    d3.select(this).style('opacity', 1);
 
-                visitedNodes.forEach(nodeName => {
-                    d3.select(`#node-${nodeName.replace(/\s+/g, "-")}`).style('opacity', 1);
+                    const { visitedNodes, visitedEdges } = findConnections(clickedData.data.name, leaves);
+
+                    visitedNodes.forEach(nodeName => {
+                        d3.select(`#node-${nodeName.replace(/\s+/g, "-")}`).style('opacity', 1);
+                    });
+
+                    visitedEdges.forEach(edgeId => {
+                        d3.select(`path#link-${edgeId}.link`).style('opacity', 1);
+                    });
                 });
 
-                visitedEdges.forEach(edgeId => {
-                    d3.select(`path#link-${edgeId}.link`).style('opacity', 1);
-                });
+            svg.call(d3.zoom().on("zoom", function () {
+                g.attr("transform", d3.event.transform);
+            }));
+
+            // Reset highlights
+            svg.on("click", function () {
+                d3.selectAll('.bubble').style('opacity', 1);
+                d3.selectAll('path.link').style('opacity', 1);
             });
 
-        svg.call(d3.zoom().on("zoom", function () {
-            g.attr("transform", d3.event.transform);
-        }));
-
-        // Reset highlights
-        svg.on("click", function () {
-            d3.selectAll('.bubble').style('opacity', 1);
-            d3.selectAll('path.link').style('opacity', 1);
+            document.getElementById('loading-indicator').style.display = 'none';
         });
     } catch (error) {
         console.error('Error occurred when fetching data:', error);

@@ -15,7 +15,8 @@ add_action('wp_enqueue_scripts', 'pluginScripts');
 add_shortcode('concept_graph', 'pluginShortcode');
 
 // Function to enqueue scripts and styles
-function pluginScripts() {
+function pluginScripts()
+{
     // Enqueue the stylesheet
     wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/styles.css');
 
@@ -34,7 +35,8 @@ function pluginScripts() {
 }
 
 // Shortcode function to display HTML
-function pluginShortcode() {
+function pluginShortcode()
+{
     // Enqueue specific styles and scripts only when the shortcode is used
     wp_enqueue_style('google-fonts-roboto', 'https://fonts.googleapis.com/css?family=Roboto&display=swap');
     wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/styles.css');
@@ -42,8 +44,11 @@ function pluginShortcode() {
     wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . 'js/script.js', ['d3-js'], false, true);
 
     ob_start();
-    ?>
+?>
+    <div id="loading-indicator" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; z-index: 100; display: none;">
+        Loading...
+    </div>
     <div id="graph_visualization"></div>
-    <?php
+<?php
     return ob_get_clean();
 }
