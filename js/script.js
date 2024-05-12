@@ -87,16 +87,22 @@ let line = d3.radialLine()
     .radius(d => d.y)
     .angle(d => d.x / 180 * Math.PI);
 
-let svg = d3.select("#graph_visualization").append("svg")
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight)
-    .style("display", "block");
+let svgContainer = d3.select("#graph_visualization");
 
-let g = svg.append("g");
+let svg = svgContainer.append("svg")
+    .attr("width", window.innerWidth - 20)
+    .attr("height", window.outerHeight);
+
+let translate = [window.innerWidth / 2, window.outerHeight / 2];
+
+let g = svg.append("g").attr("transform", `translate(${translate[0]},${translate[1]})`);
 
 let link = g.append("g").selectAll(".link"),
     label = g.append("g").selectAll(".label"),
     bubble = g.append("g").selectAll(".bubble");
+
+let initialTransform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(1);
+svg.call(d3.zoom().transform, initialTransform);
 
 svg.append("rect")
     .attr("width", "100%")
