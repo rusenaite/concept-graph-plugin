@@ -1,0 +1,33 @@
+body {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.bubble {
+    opacity: 0.2;
+    width: 10px;
+}
+
+#graph_visualization {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    border: 1px solid black;
+    max-width: 100%;
+}
+
+#graph_visualization svg {
+    display: block;
+    margin: 0 auto !important;
+    width: 100%;
+    height: auto;
+    border: 1px solid black;
+}
+
+.wp-block-group.has-global-padding.is-layout-constrained {
+    max-width: 100%;
+    margin: auto;
+}

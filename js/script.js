@@ -70,8 +70,8 @@ async function getGraphData() {
 
 // =================================================================================
 
-const PADDING_BUBBLE = 15 // distance between edge end and bubble
-const PADDING_LABEL = 30 // distance between edge end and engineer name
+const PADDING_BUBBLE = 15
+const PADDING_LABEL = 30
 const BUBBLE_SIZE_MIN = 7
 const BUBBLE_SIZE_MAX = 20
 
@@ -180,8 +180,8 @@ async function buildGraph() {
                 .on("mouseover", function (d) {
                     const title = toTitleCase(d.data.name);
                     const descriptionCharLimit = 200;
-
                     let description = d.data.description;
+
                     if (description.length > descriptionCharLimit) {
                         description = description.substring(0, description.lastIndexOf(" ", descriptionCharLimit)) + "...";
                     }
@@ -189,9 +189,8 @@ async function buildGraph() {
                     tooltip.transition()
                         .duration(200)
                         .style("opacity", 0.9); // Fully opaque
-                    tooltip.html("<strong>" + title + "</strong><br/>" + description)
-                        .style("left", (d3.event.pageX) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
+                    tooltip.html("<strong>" + title + "</strong><br/><span class='tooltip-description'>" + description + "</span>").style("left", (d3.event.pageX - 20) + "px")
+                        .style("top", (d3.event.pageY - 400) + "px");
                 })
                 .on("mouseout", function (d) {
                     tooltip.transition()
