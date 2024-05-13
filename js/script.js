@@ -230,10 +230,32 @@ async function buildGraph() {
             });
 
             document.getElementById('loading-indicator').style.display = 'none';
+            addInfoToggleEventListeners();
         });
     } catch (error) {
         console.error('Error occurred when fetching data:', error);
     }
+}
+
+function addInfoToggleEventListeners() {
+    document.getElementById('info-toggle').style.display = 'block';
+
+    document.getElementById('info-toggle').addEventListener('mouseover', function () {
+        const infoBar = document.getElementById('info-bar');
+        infoBar.style.display = "block";
+        infoBar.style.opacity = '1';
+        infoBar.style.pointerEvents = 'auto';
+    });
+
+    document.getElementById('info-toggle').addEventListener('mouseout', function () {
+        const infoBar = document.getElementById('info-bar');
+
+        infoBar.style.opacity = '0';
+        setTimeout(() => {
+            infoBar.style.display = 'none';
+            infoBar.style.pointerEvents = 'none';
+        }, 500);
+    });
 }
 
 function findConnections(nodeName, leaves) {

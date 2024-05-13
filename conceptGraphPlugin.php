@@ -47,20 +47,21 @@ function pluginShortcode()
 ?>
     <div id="graph_visualization">
         <div id="loading-indicator" class="loader"></div>
-    <div id="info-bar">
-        <div class="info-entry">
-            <span class="term">Valdymas</span>
-            <span class="description">Keiskite mastelį valdydami pelės ratuką ar keiskite grafo poziciją vilkdami jį pele.</span>
+        <button id="info-toggle">?</button>
+        <div id="info-bar" style="display: none;">
+            <div class="info-entry">
+                <span class="term">Valdymas</span>
+                <span class="description">Keiskite mastelį valdydami pelės ratuką ar keiskite grafo poziciją vilkdami jį pele.</span>
+            </div>
+            <div class="info-entry">
+                <span class="term">Sąvokos aprašas</span>
+                <span class="description">Pamatykite sąvokos aprašą užvedę kursorių ant pasirinktos sąvokos.</span>
+            </div>
+            <div class="info-entry">
+                <span class="term">Sąvokų ryšiai</span>
+                <span class="description">Paspaudę ant pasirinktos sąvokos galite pamatyti su šia sąvoka susijusias sąvokas.</span>
+            </div>
         </div>
-        <div class="info-entry">
-            <span class="term">Sąvokos aprašas</span>
-            <span class="description">Pamatykite sąvokos aprašą užvedę kursorių ant pasirinktos sąvokos.</span>
-        </div>
-        <div class="info-entry">
-            <span class="term">Sąvokų ryšiai</span>
-            <span class="description">Paspaudę ant pasirinktos sąvokos galite pamatyti su šia sąvoka susijusias sąvokas.</span>
-        </div>
-    </div>
     </div>
 <?php
     return ob_get_clean();
