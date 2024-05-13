@@ -54,7 +54,7 @@ body {
 
 .loader {
     border: 3px solid #f3f3f3;
-    border-top: 3px solid rgb(34, 46, 49);
+    border-top: 3px solid #314751;
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -87,7 +87,7 @@ body {
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    background-color: #293741;
+    background-color: #314751;
     color: white;
     opacity: 0.8;
 }
@@ -98,8 +98,6 @@ body {
   pointer-events: none;
   position: absolute;
   white-space: normal;
-  overflow-y: auto;
-  overflow-x: hidden;
   width: 250px;
   top: 40px;
   right: 0;
@@ -117,7 +115,6 @@ body {
     display: grid;
     grid-template-columns: 30% 1fr;
     gap: 5px;
-    flex-direction: row;
     align-items: baseline;
 }
 

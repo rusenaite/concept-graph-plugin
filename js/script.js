@@ -101,7 +101,7 @@ let link = g.append("g").selectAll(".link"),
     label = g.append("g").selectAll(".label"),
     bubble = g.append("g").selectAll(".bubble");
 
-let initialTransform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(0.5);
+let initialTransform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(1);
 svg.call(d3.zoom().transform, initialTransform);
 
 svg.append("rect")
@@ -175,7 +175,7 @@ async function buildGraph() {
                 .attr("transform", function (d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + PADDING_BUBBLE) + ",0)" })
                 .attr('r', d => bubbleSizeScale(d.value))
                 .attr('stroke', 'black')
-                .attr('fill', '#69a3b2')
+                .attr('fill', '#537889')
                 .style("pointer-events", "all")
                 .on("mouseover", function (d) {
                     const title = toTitleCase(d.data.name);
