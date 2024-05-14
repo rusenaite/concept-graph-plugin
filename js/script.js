@@ -186,10 +186,14 @@ async function buildGraph() {
                         description = description.substring(0, description.lastIndexOf(" ", descriptionCharLimit)) + "...";
                     }
 
+                    const { visitedNodes, _ } = findConnections(d.data.name, leaves);
+                    let nodeCount = visitedNodes.size > 1 ? visitedNodes.size - 1 : 0;
+
                     tooltip.transition()
                         .duration(200)
                         .style("opacity", 0.9); // Fully opaque
-                    tooltip.html("<strong>" + title + "</strong><br/><span class='tooltip-description'>" + description + "</span>").style("left", (d3.event.pageX - 20) + "px")
+                    tooltip.html("<strong>" + title + "</strong><br/><span><i>Sujungtų pirmo lygio viršūnių skaičius: " + nodeCount + "</i></span><span class='tooltip-description'>" + description + "</span>")
+                        .style("left", (d3.event.pageX - 20) + "px")
                         .style("top", (d3.event.pageY - 400) + "px");
                 })
                 .on("mouseout", function (d) {
