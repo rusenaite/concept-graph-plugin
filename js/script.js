@@ -1,13 +1,16 @@
-//import { fetchPosts, fetchTags } from './api.js';
-
 // Fetch API data
 
-const BASE_URL = 'http://localhost:8082/areteios/wp-json/wp/v2';
 const DICTIONARY_ITEM_TYPE = 5;
 
 async function fetchPosts() {
     try {
-        const response = await fetch(`${BASE_URL}/posts?per_page=100`);
+        const response = await fetch(wpApiSettings.root + wpApiSettings.posts, {
+            method: 'GET',
+            headers: new Headers({
+                'X-WP-Nonce': wpApiSettings.nonce,
+            }),
+        });
+
         const postsData = await response.json();
 
         const transformedData = postsData
@@ -27,7 +30,13 @@ async function fetchPosts() {
 
 async function fetchTags() {
     try {
-        const response = await fetch(`${BASE_URL}/tags?per_page=100`);
+        const response = await fetch(wpApiSettings.root + wpApiSettings.tags, {
+            method: 'GET',
+            headers: new Headers({
+                'X-WP-Nonce': wpApiSettings.nonce,
+            }),
+        });
+
         const tagsData = await response.json();
 
         const transformedTags = tagsData
@@ -68,7 +77,7 @@ async function getGraphData() {
     }
 }
 
-// =================================================================================
+// Graph visualization
 
 const PADDING_BUBBLE = 15
 const PADDING_LABEL = 30
@@ -77,7 +86,7 @@ const BUBBLE_SIZE_MAX = 20
 
 let diameter = 860,
     radius = diameter / 2,
-    innerRadius = radius - 170; // between center and edge end
+    innerRadius = radius - 170;
 
 let cluster = d3.cluster()
     .size([360, innerRadius]);
