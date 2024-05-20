@@ -15,11 +15,9 @@
     Network: false
 */
 
-// Hook for including scripts and styles
 add_action('wp_enqueue_scripts', 'pluginScripts');
 add_shortcode('concept_graph', 'pluginShortcode');
 
-// Function to enqueue scripts and styles
 function pluginScripts()
 {
     if (is_page('grafas')) {

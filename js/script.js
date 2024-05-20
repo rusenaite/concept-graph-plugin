@@ -128,8 +128,6 @@ let bubbleSizeScale = d3.scaleLinear()
 
 buildGraph();
 
-//=========================================================================================
-
 async function buildGraph() {
     try {
         document.addEventListener('DOMContentLoaded', async () => {
@@ -377,8 +375,7 @@ function getLinksOfAllNodes(nodes) {
                 let target = nodesMap[link];
 
                 if (target === undefined) {
-                    console.log('target is undefined');
-                    console.log('link', link);
+                    console.error('Node target is undefined.');
                 } else {
                     let createdLink = source.path(target);
                     links.push(createdLink);
