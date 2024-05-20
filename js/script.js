@@ -133,8 +133,6 @@ buildGraph();
 async function buildGraph() {
     try {
         document.addEventListener('DOMContentLoaded', async () => {
-            document.getElementById('loading-indicator').style.display = 'block';
-
             const graphData = await getGraphData();
 
             let root = createHierarchyForRadialLayoutFromFlatData(graphData)
@@ -241,7 +239,11 @@ async function buildGraph() {
                 d3.selectAll('path.link').style('opacity', 1);
             });
 
-            document.getElementById('loading-indicator').style.display = 'none';
+            const loadingElement = document.getElementById('loading-indicator');
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
+
             addInfoToggleEventListeners();
         });
     } catch (error) {

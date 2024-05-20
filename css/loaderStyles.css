@@ -1,4 +1,5 @@
 .loader {
+    display: inline-block;
     border: 3px solid #f3f3f3;
     border-top: 3px solid #314751;
     border-radius: 50%;

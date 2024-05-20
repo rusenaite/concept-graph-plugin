@@ -22,20 +22,22 @@ add_shortcode('concept_graph', 'pluginShortcode');
 // Function to enqueue scripts and styles
 function pluginScripts()
 {
-    wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/mainStyles.css');
-    wp_enqueue_style('loaderStyles', plugin_dir_url(__FILE__) . 'css/loaderStyles.css');
-    wp_enqueue_style('infoBarStyles', plugin_dir_url(__FILE__) . 'css/infoBarStyles.css');
-    wp_enqueue_style('tooltipStyles', plugin_dir_url(__FILE__) . 'css/tooltipStyles.css');
+    if (is_page('grafas')) {
+        wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/mainStyles.css');
+        wp_enqueue_style('loaderStyles', plugin_dir_url(__FILE__) . 'css/loaderStyles.css');
+        wp_enqueue_style('infoBarStyles', plugin_dir_url(__FILE__) . 'css/infoBarStyles.css');
+        wp_enqueue_style('tooltipStyles', plugin_dir_url(__FILE__) . 'css/tooltipStyles.css');
 
-    wp_enqueue_script('d3-js', 'https://d3js.org/d3.v4.js', [], false, true);
-    wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . '/js/script.js', array( 'wp-api', 'd3-js' ), false, true);
+        wp_enqueue_script('d3-js', 'https://d3js.org/d3.v4.js', [], false, true);
+        wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . '/js/script.js', array('wp-api', 'd3-js'), false, true);
 
-    wp_localize_script('pluginScript', 'wpApiSettings', array(
-        'root' => esc_url_raw(rest_url()),
-        'nonce' => wp_create_nonce('wp_rest'),
-        'posts' => 'wp/v2/posts?per_page=100',
-        'tags' => 'wp/v2/tags?per_page=100',
-    ));
+        wp_localize_script('pluginScript', 'wpApiSettings', array(
+            'root' => esc_url_raw(rest_url()),
+            'nonce' => wp_create_nonce('wp_rest'),
+            'posts' => 'wp/v2/posts?per_page=100',
+            'tags' => 'wp/v2/tags?per_page=100',
+        ));
+    }
 }
 
 function pluginShortcode()
