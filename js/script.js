@@ -199,7 +199,7 @@ async function buildGraph() {
                         .style("opacity", 0.9); // Fully opaque
                     tooltip.html("<strong>" + title + "</strong><br/><span><i>Sujungtų pirmo lygio viršūnių skaičius: " + nodeCount + "</i></span><span class='tooltip-description'>" + description + "</span>")
                         .style("left", (d3.event.pageX - 20) + "px")
-                        .style("top", (d3.event.pageY - 400) + "px");
+                        .style("top", (d3.event.pageY - 450) + "px");
                 })
                 .on("mouseout", function (d) {
                     tooltip.transition()

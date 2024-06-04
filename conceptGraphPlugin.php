@@ -1,11 +1,11 @@
 <?php
 /*
-    Plugin Name: Concept Graph
+    Plugin Name: Areteios Concept Graph
     Plugin URI: https://github.com/rusenaite/concept-graph-plugin
     Description: A WordPress plugin of concept graph visualization.
     Requires at least: 5.2
     Requires PHP: 7.2
-    Version: 1.0
+    Version: 1.0.0
     License: GPL-3.0
     License URI: https://www.gnu.org/licenses/gpl-3.0.txt
     Author: Austėja Rušėnaitė
@@ -21,13 +21,14 @@ add_shortcode('concept_graph', 'pluginShortcode');
 function pluginScripts()
 {
     if (is_page('grafas')) {
-        wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/mainStyles.css');
-        wp_enqueue_style('loaderStyles', plugin_dir_url(__FILE__) . 'css/loaderStyles.css');
-        wp_enqueue_style('infoBarStyles', plugin_dir_url(__FILE__) . 'css/infoBarStyles.css');
-        wp_enqueue_style('tooltipStyles', plugin_dir_url(__FILE__) . 'css/tooltipStyles.css');
+        wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/mainStyles.css', [], '1.0.0');
+        wp_enqueue_style('loaderStyles', plugin_dir_url(__FILE__) . 'css/loaderStyles.css', [], '1.0.0');
+        wp_enqueue_style('infoBarStyles', plugin_dir_url(__FILE__) . 'css/infoBarStyles.css', [], '1.0.0');
+        wp_enqueue_style('tooltipStyles', plugin_dir_url(__FILE__) . 'css/tooltipStyles.css', [], '1.0.0');
 
-        wp_enqueue_script('d3-js', 'https://d3js.org/d3.v4.js', [], false, true);
-        wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . '/js/script.js', array('wp-api', 'd3-js'), false, true);
+        wp_enqueue_script('d3-js', 'https://d3js.org/d3.v4.js', [], '7.9.0', true);
+
+        wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . '/js/script.js', array('wp-api', 'd3-js'), '1.0.0', true);
 
         wp_localize_script('pluginScript', 'wpApiSettings', array(
             'root' => esc_url_raw(rest_url()),
@@ -40,15 +41,15 @@ function pluginScripts()
 
 function pluginShortcode()
 {
-    wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/mainStyles.css');
-    wp_enqueue_style('loaderStyles', plugin_dir_url(__FILE__) . 'css/loaderStyles.css');
-    wp_enqueue_style('infoBarStyles', plugin_dir_url(__FILE__) . 'css/infoBarStyles.css');
-    wp_enqueue_style('tooltipStyles', plugin_dir_url(__FILE__) . 'css/tooltipStyles.css');
+    wp_enqueue_style('pluginStyles', plugin_dir_url(__FILE__) . 'css/mainStyles.css', [], '1.0.0');
+    wp_enqueue_style('loaderStyles', plugin_dir_url(__FILE__) . 'css/loaderStyles.css', [], '1.0.0');
+    wp_enqueue_style('infoBarStyles', plugin_dir_url(__FILE__) . 'css/infoBarStyles.css', [], '1.0.0');
+    wp_enqueue_style('tooltipStyles', plugin_dir_url(__FILE__) . 'css/tooltipStyles.css', [], '1.0.0');
 
-    wp_enqueue_style('google-fonts-roboto', 'https://fonts.googleapis.com/css?family=Roboto&display=swap');
-    wp_enqueue_script('d3-js', 'https://d3js.org/d3.v4.js', [], false, true);
+    wp_enqueue_style('google-fonts-roboto', 'https://fonts.googleapis.com/css?family=Roboto&display=swap', [], '1.0.0');
 
-    wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . 'js/script.js', ['d3-js'], false, true);
+    wp_enqueue_script('d3-js', 'https://d3js.org/d3.v4.js', [], '7.9.0', true);
+    wp_enqueue_script('pluginScript', plugin_dir_url(__FILE__) . '/js/script.js', array('wp-api', 'd3-js'), '1.0.0', true);
 
     ob_start();
 ?>
