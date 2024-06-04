@@ -13,6 +13,8 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
 Areteios Concept Graph is a WordPress plugin that provides concept graph visualization. It's a tool for visualizing and understanding complex concepts in a simple and intuitive way.
 
+<img src="graph.png" width="500" height="500">
+
 ## Installation
 
 1. Upload the plugin files to the `/wp-content/plugins/areteios-concept-graph` directory.
